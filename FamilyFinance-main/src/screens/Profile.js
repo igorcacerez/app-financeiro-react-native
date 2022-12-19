@@ -1,31 +1,32 @@
+import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ActivityIndicator, Pressable } from 'react-native';
 import { AlertNotificationRoot, ALERT_TYPE, Toast } from 'react-native-alert-notification';
 import colors from '../design-system/colors';
 import { handleUpdateUser } from '../services/userService';
-import { getUser } from '../storage/userStorage';
-import { setUser } from "../storage/userStorage";
+import UserContext from '../context/userContext';
+import { setUserLocal } from "../storage/userStorage";
 
 const Profile = () => {
-    const [id, setId] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
+    const {user, setUser} = useContext(UserContext);
+    const [id, setId] = useState(user.id);
+    const [email, setEmail] = useState(user.email);
+    const [password, setPassword] = useState(user.password);
+    const [name, setName] = useState(user.name);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    
 
-    useEffect(() => {
+    useEffect(() => {  
         const loadUser = async () => {
-            const user = await getUser();
             setId(user.id);
             setEmail(user.email);
             setName(user.name);
             setPassword(user.password);
         }
-      
+
         loadUser();
-      }, []);
+      }, [user]); 
 
     const navigation = useNavigation();
     
@@ -45,7 +46,8 @@ const Profile = () => {
                 title: "Success",
                 textBody: "User updated successfully",
             });
-            
+        
+            await setUserLocal(response);
             await setUser(response);
             
         } catch (error) {
@@ -59,6 +61,11 @@ const Profile = () => {
         }
 
         setLoading(false);
+    };
+
+    const handlerLogout = async () => {
+        await setUserLocal(null);
+        navigation.navigate('Login');
     };
 
     return (
@@ -93,6 +100,12 @@ const Profile = () => {
                 </Pressable>
 
                 {loading && <ActivityIndicator size="large" color="#0000ff" />}
+
+
+                <Pressable style={styles.buttonLogout} onPress={handlerLogout}>
+                    <AntDesign name="logout" color={colors.danger} size={20} />
+                    <Text style={styles.buttonTextLogout}>Logout</Text>
+                </Pressable>
             </View>
         </AlertNotificationRoot>
     );
@@ -129,6 +142,24 @@ const styles = StyleSheet.create({
     buttonText: {
         color: colors.white,
         textAlign: 'center',
+    },
+
+    buttonLogout: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+        backgroundColor: 'transparent',
+        color: colors.white,
+        width: 200,
+        padding: 8,
+        marginTop: 26,
+    },
+
+    buttonTextLogout: {
+        color: colors.danger,
+        textAlign: 'center',
+        marginLeft: 8,
     },
 });
 

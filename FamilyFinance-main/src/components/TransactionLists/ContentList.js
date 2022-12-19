@@ -5,21 +5,11 @@ import { getUser } from '../../storage/userStorage';
 
 
 const ContentList = ({ data, onRefresh, onEndReached, refreshing }) => {
-    const [user, setUser] = React.useState(null);
-
-    React.useEffect(() => {
-        getUser()
-            .then((user) => {
-                setUser(user);
-            });
-    }, []);
-
 
     const renderItem = ({ item }) => {
         return (
             <ItemList
                 item={item}
-                user={user}
             />
         );
     };

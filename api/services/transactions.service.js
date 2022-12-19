@@ -1,5 +1,6 @@
 const db = require('../models/index');
 const Transaction = require('../models/Transactions');
+const User = require('../models/Users');
 
 // Get the transaction by id
 exports.getTransactionById = async (id) => {
@@ -19,7 +20,12 @@ exports.getTransactionById = async (id) => {
 // Get the all transactions
 exports.getTransactions = async () => {
     createDatabase();
+    
     const transactions = await Transaction.findAll({
+        include: [{
+            model: User,
+            as: 'user'
+        }],
         order: [
             ['id', 'DESC'],
         ]

@@ -1,15 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
 import colors from '../design-system/colors';
 import { handleLogin } from '../services/userService';
-import { setUser } from "../storage/userStorage";
+import UserContext from '../context/userContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const {user, setUser} = useContext(UserContext);
 
     const navigation = useNavigation();
     
@@ -17,14 +18,8 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await handleLogin(email, password);
-            console.log("aaaa", response);
-            
-            if(response) {
-                await setUser(response);
-                navigation.navigate('Home')
-            } 
-            
-            setError("Credentials are not valid");
+            await setUser(response);
+            navigation.navigate('Home')
 
         } catch (e) {
             setError(e.message);

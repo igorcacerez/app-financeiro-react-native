@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./index.js');
+const User = require('./Users.js');
 
 // Define the Transactions model
 // Type is a boolean, true for income, false for expense
@@ -8,10 +9,6 @@ const Transactions = db.define('transactions', {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
-    },
-    user_id: { 
-        type: Sequelize.INTEGER,
         allowNull: false,
     },
     group_id: {
@@ -36,5 +33,9 @@ const Transactions = db.define('transactions', {
         defaultValue: true,
     }
 });
+
+// Define the relationship between the Transactions and Users models
+Transactions.belongsTo(User, {foreignKey: 'user_id'});
+
 
 module.exports = Transactions;

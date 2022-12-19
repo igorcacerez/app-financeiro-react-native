@@ -11,13 +11,15 @@ import colors from "./src/design-system/colors";
 import Login from "./src/screens/Login";
 import Profile from "./src/screens/Profile";
 import Register from "./src/screens/Register";
-import { getUser } from "./src/storage/userStorage";
+import Charts from "./src/screens/Charts";
+import { getUserLocal } from "./src/storage/userStorage";
 import { useEffect, useState } from "react";
+import UserContext from "./src/context/userContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function TabScreens () {
+function TabScreens() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -76,6 +78,17 @@ function TabScreens () {
       />
 
       <Tab.Screen
+        name="Charts"
+        component={Charts}
+        options={{
+          tabBarLabel: "Charts",
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="linechart" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -94,25 +107,30 @@ export default function App() {
 
   useEffect(() => {
     const loadUser = async () => {
-      const user = await getUser();
+      const user = await getUserLocal();
       setUser(user);
     }
-  
+
     loadUser();
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator 
-        screenOptions={{
-          headerShown: false
-        }}
-      >
-        {!user && <Stack.Screen name="Login" component={Login} />}
-        <Stack.Screen name="Home" component={TabScreens} />
-        <Stack.Screen name="Register" component={Register} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <UserContext.Provider value={{ user, setUser }}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerShown: false
+            }}
+          >
+            {!user && <Stack.Screen name="Login" component={Login} />}
+            <Stack.Screen name="Home" component={TabScreens} />
+            <Stack.Screen name="Register" component={Register} />
+            {user && <Stack.Screen name="Login" component={Login} />}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserContext.Provider>
+    </>
   )
 }
 
