@@ -44,7 +44,6 @@ const Expenses = () => {
 
       // Reset form
       setExpenseValue(0);
-      setExpenseType("");
       setDate(new Date());
 
     } catch (error) {

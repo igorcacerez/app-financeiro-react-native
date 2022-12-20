@@ -7,6 +7,10 @@ exports.getTransactionById = async (id) => {
     createDatabase();
 
     const transaction = await Transaction.findOne({
+        include: [{
+            model: User,
+            as: 'user'
+        }],
         where: {
             id: id
         }

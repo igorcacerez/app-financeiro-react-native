@@ -44,7 +44,6 @@ const Incomes = () => {
 
       // Reset form
       setIncome(0);
-      setIncomeType("");
       setDate(new Date());
 
     } catch (error) {

@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../../design-system/colors";
+import { useNavigation } from "@react-navigation/native";
 
 const ItemList = ({ item }) => {
+
+    const navigation = useNavigation();
 
     let data = new Date(item.date);
     let styleType = styles.expenseType
@@ -11,8 +14,12 @@ const ItemList = ({ item }) => {
         styleType = styles.IncomeType
     }
 
+    const handleClick = () => {
+        navigation.navigate('TransactionDetails', { transaction: item });
+    }
+
     return (
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity onPress={handleClick} style={styles.itemContainer}>
             <View style={styles.itemLeft}>
                 <Text style={styles.itemTitle}>{item.category}</Text>
                 <Text style={styles.itemDate}>{item.user.name}</Text>

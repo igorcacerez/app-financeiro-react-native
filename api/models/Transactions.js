@@ -11,10 +11,6 @@ const Transactions = db.define('transactions', {
         autoIncrement: true,
         allowNull: false,
     },
-    group_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-    },
     amount: {
         type: Sequelize.INTEGER,
         allowNull: false,

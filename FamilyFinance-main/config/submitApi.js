@@ -10,7 +10,7 @@ const submitApi = (url, method, data) => {
     };
     
     // make the request
-    return fetch(`http://10.92.3.10:8888/${url}`, options)
+    return fetch(`http://192.168.1.16:8888/${url}`, options)
         .then((response) => {
             return response.json();
         })

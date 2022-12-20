@@ -20,6 +20,5 @@ module.exports = (app) => {
     // Require the routes
     app.use('/users', require('./users'));
     app.use('/transactions', require('./transactions'));
-    app.use('/groups', require('./groups'));
     app.use('/charts', require('./charts'));
 };

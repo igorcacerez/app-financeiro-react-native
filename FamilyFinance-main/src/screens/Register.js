@@ -10,33 +10,31 @@ const Resgister = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
 
     const navigation = useNavigation();
     
     const handleRegisterUser = async () => {
         setLoading(true);
+
         try {
-            const response = await handleRegister(name, email, password);
+            await handleRegister(name, email, password);
             
-            if (response) {
-                Toast.show({
-                    type: ALERT_TYPE.SUCCESS,
-                    title: "Success",
-                    textBody: "User registered successfully",
-                });
-                
-                setTimeout(() => {
-                    navigation.navigate('Login');
-                }, 1000);
-
-                return;
-            }
-
-            setError("Error to register user");
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: "Success",
+                textBody: "User registered successfully",
+            });
+            
+            setTimeout(() => {
+                navigation.navigate('Login');
+            }, 1000);
 
         } catch (error) {
-            setError(error.message);
+            Toast.show({
+                type: ALERT_TYPE.ERROR,
+                title: "Error",
+                textBody: error.message || "Error registering user",
+            });
         }
 
         setLoading(false);
@@ -50,7 +48,6 @@ const Resgister = () => {
                     style={styles.input}
                     placeholder="Name"
                     value={name}
-                    autoCapitalize='none'
                     onChangeText={setName}
                 />
                 <TextInput
@@ -80,7 +77,6 @@ const Resgister = () => {
                 </Pressable>
 
                 {loading && <ActivityIndicator size="large" color="#0000ff" />}
-                {error && <Text style={{ color: 'red' }}>{error}</Text>}
             </View>
         </AlertNotificationRoot>
     );
