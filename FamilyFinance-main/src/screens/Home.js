@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import InformationCard from "../components/Cards/InformationCard";
 import ContentList from "../components/TransactionLists/ContentList";
 import { handleGetTransactions, handleValueExpenseAndIncome} from "../services/transactionService";
+import HomeBanner from "../components/Banner/HomeBanner";
 
 const Home = () => {
   const [transactions, setTransactions] = useState([]);
@@ -27,6 +28,8 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+        <HomeBanner />
+
         <InformationCard
             valueIncomes={valueIncomes}
             valueExpense={valueExpense}
